@@ -2,10 +2,6 @@ const express = require("express")
 
 const app = express()
 
-const userRouter = require("./routes/user")
-
-app.use("/users", userRouter)
-
 
 // needed for adding a document
 
@@ -19,13 +15,17 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json())
 
+const userRouter = require("./routes/user")
+
+app.use("/users", userRouter)
+
 
 app.listen(4000)
 
 
 app.get("/", (req, res) => {
 
-    res.send("hi")
+    res.send("index page")
 
 })
 

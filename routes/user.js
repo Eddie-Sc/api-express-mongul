@@ -13,27 +13,54 @@ router.get("/", (req, res) => {
 })
 
 router.post("/", (req, res) => {
-    const doc = {
-        firstName: "Sue",
-        lastName: "McSue"
-    }
+//    res.send("Create new user") 
 
-    collection.insertOne(doc, (err, res) => {
+    collection.insertOne(req.body, (err, res) => {
         if (err) throw err;
     })
     res.send(" 1 document inserted.")
+    res.send (req.body)
+
 })
 
 router
 
     .route("/:id")
     .get((req, res) => {
-       // res.send(`Get a User with ID: ${req.params.id}`)
+    //    res.send(`Get a User with ID: ${req.params.id}`)
+    const query = {
+        _id: ObjectId(req.params.id)
+    }
+        collection.findOne(query, (err, result) =>
+        {if (err) throw err;
+        res.send(result)
     })
+    })
+
     .put((req, res) => {
-        //res.send(`Update a User with ID: ${req.params.id}`)
+        // res.send(`Update a User with ID: 
+        // ${req.params.id}`)
+        const query = { _id: ObjectId(req.params.id) }
+        const newvalue = {
+            $set: {
+                "lastName": "King",
+                "firstName": "Tim"
+            }
+        }
+        collection.updateOne(query, newvalue,
+            (err, result) => {
+                if (err) throw err;
+            })
+
+            res.send("1 doc updated.")
     })
     .delete((req, res) => {
-//res.send(`Delete a User with ID: ${req.params.id}`)
+// res.send(`Delete a User with ID: 
+// ${req.params.id}`)
+const query = { _id: ObjectId(req.params.id) }
+collection.deleteOne(query, (err, result) => {
+    if (err) throw err;
+})
+res.send ("1 document deleted. ")
     })
 module.exports = router
